@@ -13,7 +13,7 @@ class App extends React.Component {
            <SearchBar />
           <div className="App-playlist">
            Add a SearchResults component
-           Add a Playlist component
+           <Playlist />
           </div>
         </div>
       </div>
