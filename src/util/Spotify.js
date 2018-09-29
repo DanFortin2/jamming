@@ -3,6 +3,7 @@ let ClientID = 'f661f333eb894da5a80183420858abb3'
 
 //var for rediect url
 let redirectURI = 'http://localhost:3000/'
+//let redirectURI = 'https://danfortin2.github.io/jammingplaylists'
 
 //empty object for user token
 let UserToken;
