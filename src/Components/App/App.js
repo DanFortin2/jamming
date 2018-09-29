@@ -10,14 +10,9 @@ class App extends React.Component {
     super(props);
     //hardocded search results state and then search results set to an object wtih the JSON response values
     this.state = {
-      searchResults: [{
-        name: 'test',
-        album: 'tets'
-      }],
-      playlistName: 'my playlist',
-      playlistTracks: [{
-        name: 'test'
-      }]
+      searchResults: [],
+      playlistName: 'New Playlist',
+      playlistTracks: []
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
@@ -43,9 +38,9 @@ class App extends React.Component {
   //removed selected track using filter based off the track id
   removeTrack(track) {
     let removeTrackItem = this.state.playlistTracks.filter(removedTrack => removedTrack.id !== track.id);
-      this.setState({
-        playlistTracks: removeTrackItem
-      });
+    this.setState({
+      playlistTracks: removeTrackItem
+    });
   }
 
   //allow someone to update and change the name of the playlist
