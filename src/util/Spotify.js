@@ -64,8 +64,52 @@ let Spotify = {
     });
   },
 
-  savePlayList() {
-
+//create saveplaylist method that accepts a playlistname and an array of track uris
+  savePlayList(playListName, trackURIs) {
+    //check to see if there are values for playlist name or track uris if not return. Use length beause track uris is an array
+    if (!playListName || !trackURIs.length) {
+      return;
+    } else {
+      //create three variable for users token, another to hold the user token in the heard and empty variable for userid
+      let newToken = Spotify.getAccessToken();
+      let headers = {
+        Authorization: `Bearer ${newToken}`
+      };
+      let userID;
+    return fetch(`https://api.spotify.com/v1/me`,{headers: headers}).then(response => {
+      if(response.ok) {
+        return response.json()
+      } else {
+        console.log('saving playlist breaking here')
+      }
+      //send playlist name to user account
+    }).then(jsonResponse => {
+      userID = jsonResponse.id;
+      return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+        headers: headers,
+        method: 'POST',
+        body: JSON.stringify({
+          name: playListName
+        })
+      });
+    }).then(response => {
+      if(response.ok) {
+        return response.json()
+      } else {
+        console.log('saving tracks breaks here')
+      }
+      //use playlist ID returned to send tracks
+    }).then(jsonResponse => {
+      let playlistId = jsonResponse.id;
+      return fetch(`https://api.spotify.com/v1/users/${userID}/playlists/${playlistId}/tracks`, {
+        headers: headers,
+        method: 'POST',
+        body: JSON.stringify({
+          uris: trackURIs
+        })
+      });
+    })
+    }
   }
 }
 

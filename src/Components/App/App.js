@@ -52,8 +52,17 @@ class App extends React.Component {
 
   //use spotify api to save playlist
   savePlayList() {
-    //generate an array of uri values from a variable called trackURIs
+    // grab all the tracks from playlist and attach them to track URIS avariable
+    //set another variable for the current state playlist name
     let trackURIs = this.state.playlistTracks.map(track => track.uri);
+    let playlistName = this.state.playlistName;
+    //passed the two above variables over to the spotify save playlist method and then reset the two states to the defaults below
+    Spotify.savePlayList(playlistName, trackURIs).then(reset => {
+      this.setState({
+        playlistName: 'New Playlist',
+        playlistTracks: []
+      })
+    })
   }
 
 //set search method
