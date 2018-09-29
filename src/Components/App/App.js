@@ -3,6 +3,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist'
+import Spotify from '../../util/Spotify'
 
 class App extends React.Component {
   constructor(props) {
@@ -11,18 +12,18 @@ class App extends React.Component {
     this.state = {
       searchResults: [{
         name: 'test',
-        artist: 'test',
-        album: 'test',
-        id: '1'}],
+        album: 'tets'
+      }],
       playlistName: 'my playlist',
       playlistTracks: [{
-        name: 'test',
-        artist: 'test',
-        album: 'test',
-        id: '2'}]
+        name: 'test'
+      }]
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
+    this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.savePlayList = this.savePlayList.bind(this);
+    this.search = this.search.bind(this);
   }
 
   //add track from search list, first check to see if the song ID matches a current song ID in the list if so do nothing.
@@ -47,17 +48,42 @@ class App extends React.Component {
       });
   }
 
+  //allow someone to update and change the name of the playlist
+  updatePlaylistName(name) {
+    this.setState({
+      playlistName: name
+    });
+  }
+
+  //use spotify api to save playlist
+  savePlayList() {
+    //generate an array of uri values from a variable called trackURIs
+    let trackURIs = this.state.playlistTracks.map(track => track.uri);
+  }
+
+//set search method
+  search(term) {
+    //leverage spotify search method, pass term down, then set state with search results from promise
+    Spotify.search(term).then(searchResults => {
+      this.setState({
+        searchResults: searchResults
+      });
+    })
+  }
+
   //passed the state of the search Results of app to search reults component
  //passed in from the state to the playlist component
+ //passed update name method to playlist componenet
+ //passed saveplaylist to playlist component
   render() {
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-           <SearchBar />
+           <SearchBar  onSearch={this.search}/>
           <div className="App-playlist">
            <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack}/>
-           <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack}/>
+           <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlayList}/>
           </div>
         </div>
       </div>
